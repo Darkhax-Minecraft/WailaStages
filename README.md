@@ -9,5 +9,5 @@ This mod is an addon for the GameStage API. This allows for access to the Waila 
 
 To add restrictions, you have to use CraftTweaker. There are two script methods available.
 
-- mods.WailaStages.setRequiredStage(String stage); - Replace the stage string with the name of the stage. This will then make it so players require that stage to view the Waila HUD. 
+- mods.WailaStages.addWailaStage(String stage); - Replace the stage string with the name of the stage. This will then make it so players require that stage to view the Waila HUD. If multiple stages are added, players will require at least one.
 - mods.WailaStages.addRequirement(String stage, String prefix); - Replace the stage string with the name of the stage. Then replace the prefix with with text of the info you want to restrict. If the tooltip line starts with the word Power, adding Power as the prefix will restrict that line to the stage. 
