@@ -1,0 +1,16 @@
+[
+{
+  "modid": "wailastages",
+  "name": "Waila Stages",
+  "description": "Allows Waila to be gated behind stages",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Darkhax"],
+  "credits": "Darkosto for the idea!",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

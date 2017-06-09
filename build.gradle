@@ -1,0 +1,205 @@
+buildscript {
+
+    repositories {
+
+        jcenter()
+
+        maven {
+
+            url = 'http://files.minecraftforge.net/maven'
+        }
+
+        maven {
+
+            url 'https://plugins.gradle.org/m2/'
+        }
+        
+        maven {
+        
+            url = 'http://maven.modmuss50.me/'
+        }
+    }
+
+    dependencies {
+
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.0.7'
+    }
+}
+
+apply plugin: 'maven'
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+    
+version = "${mod_version}" + getBuildNumber()
+group = "${mod_group}"
+archivesBaseName = "${mod_archive}"
+
+minecraft {
+
+    version = "${version_forge}"
+    mappings = "${version_mcp}"
+    runDir = 'run'
+    useDepAts = true
+    
+    replace '@VERSION@', project.version
+    replaceIn "${mod_class}.java"
+}
+
+processResources {
+
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+
+        exclude 'mcmod.info'
+    }
+    
+    from 'LICENSE'
+}
+
+repositories {
+
+    maven {
+
+        url 'http://maven.epoxide.org'
+    }
+    
+    maven {
+    
+        url 'http://tehnut.info/maven'
+    }
+    
+    maven {
+    
+        url 'http://maven.blamejared.com'
+    }
+}
+
+dependencies {
+
+    deobfCompile "net.darkhax.bookshelf:Bookshelf:${version_minecraft}-${version_bookshelf}"
+    deobfCompile "net.darkhax.gamestages:GameStages-${version_minecraft}:${version_gamestages}"
+    deobfCompile "MineTweaker3:MineTweaker3-MC1112-Main:1.11.2-${version_minetweaker}"
+    deobfCompile "mcp.mobius.waila:Hwyla:${version_hwyla}"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+task deobfJar(type: Jar) {
+
+    from sourceSets.main.output
+    classifier = "deobf"
+}
+
+artifacts {
+
+    archives deobfJar
+    archives sourcesJar
+    archives javadocJar
+}
+
+uploadArchives {
+
+    repositories {
+
+        mavenDeployer {
+
+            repository(url: "file:///var/www/html/maven")
+        }
+    }
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+
+    allprojects {
+
+        tasks.withType(Javadoc) {
+
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+String getBuildNumber() {
+
+    return System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : System.getenv('TRAVIS_BUILD_NUMBER') ? System.getenv('TRAVIS_BUILD_NUMBER') : '0';
+}
+
+// Creates a changelog based on the git changelog. Based on code by Kobata
+// https://github.com/Inventory-Tweaks/inventory-tweaks/blob/develop/build.gradle
+def getGitChangelog = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        def gitHash = System.getenv("GIT_COMMIT")
+        def gitPrevHash = System.getenv("GIT_PREVIOUS_COMMIT")
+        def travisRange = System.getenv("TRAVIS_COMMIT_RANGE")
+        if(gitHash && gitPrevHash) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + gitPrevHash + '...' + gitHash
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } else if(travisRange) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + travisRange
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } else {
+            return "";
+        }
+    } catch(ignored) {
+        return "";
+    }
+}
+
+curseforge {
+
+    apiKey = System.getenv('curseForgeApiKey') ? System.getenv('curseForgeApiKey') : '0';
+
+    project {
+
+        id = "${id_curse}"
+        releaseType = 'alpha'
+        changelog = getGitChangelog()
+        changelogType = 'markdown'
+
+        addGameVersion "${version_minecraft}"
+        
+                mainArtifact(jar) {
+          
+            relations {
+
+                requiredLibrary 'bookshelf'
+                requiredLibrary 'crafttweaker'
+                requiredLibrary 'game-stages'
+                requiredLibrary 'hwyla'
+            }
+        }
+        
+        addArtifact(deobfJar)
+        addArtifact(sourcesJar)
+        addArtifact(javadocJar)
+    }
+}
