@@ -2,9 +2,9 @@ package com.jarhax.wailastages.compat.crt;
 
 import com.jarhax.wailastages.WailaStages;
 
-import minetweaker.IUndoableAction;
+import crafttweaker.IAction;
 
-public class ActionAddRequiredStage implements IUndoableAction {
+public class ActionAddRequiredStage implements IAction {
 
 	private final String stage;
 
@@ -23,29 +23,5 @@ public class ActionAddRequiredStage implements IUndoableAction {
 	public String describe() {
 
 		return String.format("Added possible waila stage requirement %s", this.stage);
-	}
-
-	@Override
-	public void undo() {
-
-		WailaStages.requiredStages.remove(this.stage);
-	}
-
-	@Override
-	public String describeUndo() {
-
-		return String.format("Removed waila stage requirement %s", this.stage);
-	}
-
-	@Override
-	public boolean canUndo() {
-
-		return true;
-	}
-
-	@Override
-	public Object getOverrideKey() {
-
-		return null;
 	}
 }

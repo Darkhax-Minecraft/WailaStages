@@ -8,9 +8,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.jarhax.wailastages.compat.crt.WailaStagesCrT;
 
+import crafttweaker.CraftTweakerAPI;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
-import minetweaker.MineTweakerAPI;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
@@ -35,7 +35,7 @@ public class WailaStages {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent ev) {
 
-		MineTweakerAPI.registerClass(WailaStagesCrT.class);
+		CraftTweakerAPI.registerClass(WailaStagesCrT.class);
 	}
 
 	@SubscribeEvent
