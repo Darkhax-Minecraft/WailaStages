@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod(modid = "wailastages", name = "Waila Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.387,);required-after:waila@[1.8.15,);required-after:gamestages@[1.0.11,);required-after:crafttweaker@[3.0.25.,)")
+@Mod(modid = "wailastages", name = "Waila Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.414,);required-after:waila@[1.8.19,);required-after:gamestages@[1.0.12,);required-after:crafttweaker@[4.0.1.,)")
 public class WailaStages {
 
 	public static List<String> requiredStages = new ArrayList<>();
