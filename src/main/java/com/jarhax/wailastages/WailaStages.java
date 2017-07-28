@@ -71,12 +71,19 @@ public class WailaStages {
 				for (Iterator<String> iterator = event.getCurrentTip().iterator(); iterator.hasNext();) {
 
 					final String line = iterator.next();
-
+					boolean hasRemoved = false;
+					
 					for (String regex : prefixes.get(stage)) {
 
+						if (hasRemoved) {
+							
+							break;
+						}
+						
 						if (line.startsWith(regex)) {
 
 							iterator.remove();
+							hasRemoved = true;
 						}
 					}
 				}
