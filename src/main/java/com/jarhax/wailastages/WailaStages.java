@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
 import net.darkhax.bookshelf.util.PlayerUtils;
@@ -19,68 +20,68 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod(modid = "wailastages", name = "Waila Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.414,);required-after:waila@[1.8.19,);required-after:gamestages@[1.0.12,);required-after:crafttweaker@[4.0.1.,)")
 public class WailaStages {
 
-	public static List<String> requiredStages = new ArrayList<>();
-	public static Multimap<String, String> prefixes = HashMultimap.create();
+    public static List<String> requiredStages = new ArrayList<>();
+    public static Multimap<String, String> prefixes = HashMultimap.create();
 
-	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent ev) {
+    @Mod.EventHandler
+    public void preInit (FMLPreInitializationEvent ev) {
 
-		MinecraftForge.EVENT_BUS.register(this);
-	}
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
-	@SubscribeEvent
-	public void preTooltipRender(WailaRenderEvent.Pre event) {
+    @SubscribeEvent
+    public void preTooltipRender (WailaRenderEvent.Pre event) {
 
-		if (!requiredStages.isEmpty()) {
-			
-			IStageData stageData = PlayerDataHandler.getStageData(PlayerUtils.getClientPlayer());
+        if (!requiredStages.isEmpty()) {
 
-			boolean shouldLock = true;
+            final IStageData stageData = PlayerDataHandler.getStageData(PlayerUtils.getClientPlayer());
 
-			for (String requiredStage : requiredStages) {
+            boolean shouldLock = true;
 
-				if (stageData.hasUnlockedStage(requiredStage)) {
+            for (final String requiredStage : requiredStages) {
 
-					shouldLock = false;
-				}
-			}
+                if (stageData.hasUnlockedStage(requiredStage)) {
 
-			if (shouldLock) {
+                    shouldLock = false;
+                }
+            }
 
-				event.setCanceled(true);
-			}
-		}
-	}
+            if (shouldLock) {
 
-	@SubscribeEvent
-	public void getTooltipText(WailaTooltipEvent event) {
+                event.setCanceled(true);
+            }
+        }
+    }
 
-		IStageData stageData = PlayerDataHandler.getStageData(PlayerUtils.getClientPlayer());
+    @SubscribeEvent
+    public void getTooltipText (WailaTooltipEvent event) {
 
-		for (String stage : prefixes.keySet()) {
+        final IStageData stageData = PlayerDataHandler.getStageData(PlayerUtils.getClientPlayer());
 
-			if (!stageData.hasUnlockedStage(stage)) {
+        for (final String stage : prefixes.keySet()) {
 
-				for (Iterator<String> iterator = event.getCurrentTip().iterator(); iterator.hasNext();) {
+            if (!stageData.hasUnlockedStage(stage)) {
 
-					final String line = iterator.next();
-					boolean hasRemoved = false;
-					
-					for (String regex : prefixes.get(stage)) {
+                for (final Iterator<String> iterator = event.getCurrentTip().iterator(); iterator.hasNext();) {
 
-						if (hasRemoved) {
-							
-							break;
-						}
-						
-						if (line.startsWith(regex)) {
+                    final String line = iterator.next();
+                    boolean hasRemoved = false;
 
-							iterator.remove();
-							hasRemoved = true;
-						}
-					}
-				}
-			}
-		}
-	}
+                    for (final String regex : prefixes.get(stage)) {
+
+                        if (hasRemoved) {
+
+                            break;
+                        }
+
+                        if (line.startsWith(regex)) {
+
+                            iterator.remove();
+                            hasRemoved = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

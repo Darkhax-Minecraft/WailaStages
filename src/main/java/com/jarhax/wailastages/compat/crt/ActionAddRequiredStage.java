@@ -6,22 +6,22 @@ import crafttweaker.IAction;
 
 public class ActionAddRequiredStage implements IAction {
 
-	private final String stage;
+    private final String stage;
 
-	public ActionAddRequiredStage(String stage) {
+    public ActionAddRequiredStage (String stage) {
 
-		this.stage = stage;
-	}
+        this.stage = stage;
+    }
 
-	@Override
-	public void apply() {
+    @Override
+    public void apply () {
 
-		WailaStages.requiredStages.add(this.stage);
-	}
+        WailaStages.requiredStages.add(this.stage);
+    }
 
-	@Override
-	public String describe() {
+    @Override
+    public String describe () {
 
-		return String.format("Added possible waila stage requirement %s", this.stage);
-	}
+        return String.format("Added possible waila stage requirement %s", this.stage);
+    }
 }
