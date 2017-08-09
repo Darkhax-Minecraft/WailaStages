@@ -31,21 +31,24 @@ public class WailaStages {
 	@SubscribeEvent
 	public void preTooltipRender(WailaRenderEvent.Pre event) {
 
-		IStageData stageData = PlayerDataHandler.getStageData(PlayerUtils.getClientPlayer());
+		if (!requiredStages.isEmpty()) {
+			
+			IStageData stageData = PlayerDataHandler.getStageData(PlayerUtils.getClientPlayer());
 
-		boolean shouldLock = true;
+			boolean shouldLock = true;
 
-		for (String requiredStage : requiredStages) {
+			for (String requiredStage : requiredStages) {
 
-			if (stageData.hasUnlockedStage(requiredStage)) {
+				if (stageData.hasUnlockedStage(requiredStage)) {
 
-				shouldLock = false;
+					shouldLock = false;
+				}
 			}
-		}
 
-		if (shouldLock) {
+			if (shouldLock) {
 
-			event.setCanceled(true);
+				event.setCanceled(true);
+			}
 		}
 	}
 
