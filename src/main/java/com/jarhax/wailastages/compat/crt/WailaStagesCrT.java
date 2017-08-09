@@ -1,9 +1,11 @@
 package com.jarhax.wailastages.compat.crt;
 
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+@ZenRegister
 @ZenClass("mods.WailaStages")
 public class WailaStagesCrT {
 
