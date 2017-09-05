@@ -9,17 +9,22 @@ import com.google.common.collect.Multimap;
 
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
+import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod(modid = "wailastages", name = "Waila Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.427,);required-after:waila@[1.8.19,);required-after:gamestages@[1.0.12,);required-after:crafttweaker@[4.0.1.,)", acceptedMinecraftVersions = "[1.12,1.12.2)")
+@Mod(modid = "wailastages", name = "Waila Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.427,);required-after:waila@[1.8.19,);required-after:gamestages@[1.0.12,);required-after:crafttweaker@[4.0.1.,)", acceptedMinecraftVersions = "[1.12,1.12.2)", certificateFingerprint = "@FINGERPRINT@")
 public class WailaStages {
 
+    public static final LoggingHelper LOG = new LoggingHelper("Waila Stages");
+    
     public static List<String> requiredStages = new ArrayList<>();
     public static Multimap<String, String> prefixes = HashMultimap.create();
 
@@ -83,5 +88,12 @@ public class WailaStages {
                 }
             }
         }
+    }
+    
+    
+    @EventHandler
+    public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+        
+        LOG.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
 }
